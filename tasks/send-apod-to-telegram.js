@@ -9,6 +9,7 @@ const {
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 
 async function sendApodToTelegram() {
+  console.log('START sendApodToTelegram');
   const apod = await fetchApod();
 
   if (!apod?.data) {
