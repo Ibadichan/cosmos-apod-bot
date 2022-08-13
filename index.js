@@ -6,7 +6,4 @@ require('dotenv').config();
 
 const sendApodToTelegram = require('./tasks/send-apod-to-telegram');
 
-setInterval(() => {
-  sendApodToTelegram();
-}, 1000 * 30);
-
+sendApodToTelegram();
