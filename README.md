@@ -1,1 +1,1 @@
-# Cosmos every day bot
+# Cosmos apod bot

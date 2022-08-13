@@ -1,38 +1,20 @@
-require('dotenv').config();
-
-const { CronJob } = require('cron');
-const axios = require('axios');
 const TelegramBot = require('node-telegram-bot-api');
+const fetchApod = require('../api/fetch-apod');
 
 const {
   TELEGRAM_TOKEN,
   TELEGRAM_CHAT_ID,
-  NASA_TOKEN,
-  CRON_TIMEZONE,
-  CRON_INTERVAL,
 } = process.env;
 
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 
-async function fetchApod() {
-  let response;
-
-  try {
-    response = await axios.get('https://api.nasa.gov/planetary/apod', {
-      params: {
-        api_key: NASA_TOKEN,
-      },
-    });
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
-  }
-
-  return response;
-}
-
-async function notifyChat() {
+async function sendApodToTelegram() {
   const apod = await fetchApod();
+
+  if (!apod?.data) {
+    await bot.sendMessage(TELEGRAM_CHAT_ID, 'При получении APOD произошла ошибка, приносим свои извинения.');
+    return;
+  }
 
   const {
     copyright,
@@ -65,14 +47,4 @@ async function notifyChat() {
   });
 }
 
-const job = new CronJob(
-  CRON_INTERVAL,
-  notifyChat,
-  // `onComplete` callback
-  null,
-  // `start` option
-  false,
-  CRON_TIMEZONE,
-);
-
-job.start();
+module.exports = sendApodToTelegram;
