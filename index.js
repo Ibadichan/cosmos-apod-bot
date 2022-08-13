@@ -1,6 +1,12 @@
 require('dotenv').config();
 
-const apodJob = require('./cron/apod-job');
+// const apodJob = require('./cron/apod-job');
 
-console.log('apodJob.start(); before');
-apodJob.start();
+// apodJob.start();
+
+const sendApodToTelegram = require('./tasks/send-apod-to-telegram');
+
+setInterval(() => {
+  sendApodToTelegram();
+}, 1000 * 30);
+
