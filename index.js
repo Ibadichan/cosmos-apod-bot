@@ -46,7 +46,7 @@ async function notifyChat() {
 
   const src = hdurl || url;
 
-  const caption = `<strong>${title} (${date})</strong>\n<em>Автор и права: ${copyright}</em>`;
+  const caption = `<strong>${title} (${date})</strong>\n<em>Автор и права: ${copyright || '-'}</em>`;
 
   if (media_type === 'image') {
     await bot.sendPhoto(TELEGRAM_CHAT_ID, src, {
