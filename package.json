@@ -6,10 +6,10 @@
   "license": "MIT",
   "private": false,
   "engines": {
-    "node": "16.x"
+    "node": ">=12.x"
   },
   "scripts": {
-    "start": "node cron/apod.js",
+    "start": "node index.js",
     "lint": "eslint . --ext .js"
   },
   "dependencies": {
