@@ -36,10 +36,18 @@ async function sendApodToTelegram() {
       parse_mode: 'HTML',
     });
   } else if (media_type === 'video') {
-    await bot.sendVideo(TELEGRAM_CHAT_ID, src, {
-      caption,
-      parse_mode: 'HTML',
-    });
+    if (src.includes('youtube')) {
+      const videoId = new URL(src).pathname.split('/').pop();
+
+      await bot.sendMessage(TELEGRAM_CHAT_ID, `${caption}\nhttps://www.youtube.com/watch?v=${videoId}`, {
+        parse_mode: 'HTML',
+      });
+    } else {
+      await bot.sendVideo(TELEGRAM_CHAT_ID, src, {
+        caption,
+        parse_mode: 'HTML',
+      });
+    }
   }
 
   await bot.sendMessage(TELEGRAM_CHAT_ID, `<strong>Пояснение</strong>: ${explanation}`, {

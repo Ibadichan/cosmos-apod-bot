@@ -1,5 +1,7 @@
+require('dotenv').config();
+
 const { CronJob } = require('cron');
-const sendApodToTelegram = require('../tasks/send-apod-to-telegram');
+const sendApodToTelegram = require('../services/send-apod-to-telegram');
 
 const {
   CRON_TIMEZONE,
@@ -16,4 +18,4 @@ const job = new CronJob(
   CRON_TIMEZONE,
 );
 
-module.exports = job;
+job.start();
