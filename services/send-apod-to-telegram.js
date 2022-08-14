@@ -12,7 +12,11 @@ async function sendApodToTelegram() {
   const apod = await fetchApod();
 
   if (!apod?.data) {
-    await bot.sendMessage(TELEGRAM_CHAT_ID, 'При получении APOD произошла ошибка, приносим свои извинения.');
+    const errorMessage = 'При получении APOD произошла ошибка, приносим свои извинения.';
+
+    await bot.sendMessage(TELEGRAM_CHAT_ID, errorMessage, {
+      disable_notification: true,
+    });
     return;
   }
 
@@ -34,6 +38,7 @@ async function sendApodToTelegram() {
     await bot.sendPhoto(TELEGRAM_CHAT_ID, src, {
       caption,
       parse_mode: 'HTML',
+      disable_notification: true,
     });
   } else if (media_type === 'video') {
     if (src.includes('youtube')) {
@@ -41,17 +46,20 @@ async function sendApodToTelegram() {
 
       await bot.sendMessage(TELEGRAM_CHAT_ID, `${caption}\nhttps://www.youtube.com/watch?v=${videoId}`, {
         parse_mode: 'HTML',
+        disable_notification: true,
       });
     } else {
       await bot.sendVideo(TELEGRAM_CHAT_ID, src, {
         caption,
         parse_mode: 'HTML',
+        disable_notification: true,
       });
     }
   }
 
   await bot.sendMessage(TELEGRAM_CHAT_ID, `<strong>Пояснение</strong>: ${explanation}`, {
     parse_mode: 'HTML',
+    disable_notification: true,
   });
 }
 
