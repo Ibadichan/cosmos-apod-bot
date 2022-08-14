@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const { CronJob } = require('cron');
-const sendApodToTelegram = require('../services/send-apod-to-telegram');
+const sendApod = require('../services/send-apod');
 
 const {
   CRON_TIMEZONE,
@@ -10,7 +10,7 @@ const {
 
 const job = new CronJob(
   CRON_INTERVAL,
-  sendApodToTelegram,
+  sendApod,
   // `onComplete` callback
   null,
   // `start` option
