@@ -57,7 +57,7 @@ async function sendApodToTelegram() {
     }
   }
 
-  await bot.sendMessage(TELEGRAM_CHAT_ID, `<strong>Пояснение</strong>: ${explanation}`, {
+  await bot.sendMessage(TELEGRAM_CHAT_ID, `<strong>Пояснение</strong>: <tg-spoiler>${explanation}</tg-spoiler>`, {
     parse_mode: 'HTML',
     disable_notification: true,
   });
