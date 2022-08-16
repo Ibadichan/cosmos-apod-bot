@@ -1,5 +1,4 @@
 const TelegramBot = require('node-telegram-bot-api');
-const fetchApod = require('../api/fetch-apod');
 
 const {
   TELEGRAM_TOKEN,
@@ -8,18 +7,7 @@ const {
 
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 
-async function sendApodToTelegram() {
-  const apod = await fetchApod();
-
-  if (!apod?.data) {
-    const errorMessage = 'При получении APOD произошла ошибка, приносим свои извинения.';
-
-    await bot.sendMessage(TELEGRAM_CHAT_ID, errorMessage, {
-      disable_notification: true,
-    });
-    return;
-  }
-
+async function sendApodToTelegram(apod) {
   const {
     copyright,
     date,
@@ -28,7 +16,7 @@ async function sendApodToTelegram() {
     media_type,
     title,
     url,
-  } = apod.data;
+  } = apod;
 
   const src = hdurl || url;
 
@@ -57,7 +45,7 @@ async function sendApodToTelegram() {
     }
   }
 
-  await bot.sendMessage(TELEGRAM_CHAT_ID, `<strong>Пояснение</strong>: <tg-spoiler>${explanation}</tg-spoiler>`, {
+  await bot.sendMessage(TELEGRAM_CHAT_ID, `<strong>Пояснение:</strong> <tg-spoiler>${explanation}</tg-spoiler>`, {
     parse_mode: 'HTML',
     disable_notification: true,
   });
