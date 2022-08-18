@@ -25,10 +25,25 @@ async function runApplication() {
     res.send('Hello from APOD Bot!');
   });
 
-  app.post('/send-apod', (req, res) => {
-    sendApod()
-      .then(() => res.send('APOD was successfully sent.'))
-      .catch(() => res.send('An error occured while sending APOD.'));
+  app.post('/send-apod', async (req, res) => {
+    try {
+      await sendApod();
+
+      res.json({
+        code: 'OK',
+        message: 'APOD was successfully sent.',
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+
+      res.status(400);
+
+      res.json({
+        code: 'ERROR',
+        message: 'An error occured while sending APOD.',
+      });
+    }
   });
 
   app.listen({ port, host }, () => {
