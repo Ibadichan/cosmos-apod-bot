@@ -7,7 +7,7 @@ const {
 
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 
-async function sendVideo(src, caption) {
+async function sendVideo({ src, caption }) {
   if (src.includes('youtube')) {
     const videoId = new URL(src).pathname.split('/').pop();
 
@@ -30,6 +30,22 @@ async function sendVideo(src, caption) {
   }
 }
 
+async function sendPhoto({ hdurl, url, caption }) {
+  try {
+    await bot.sendPhoto(TELEGRAM_CHAT_ID, hdurl, {
+      caption,
+      parse_mode: 'HTML',
+      disable_notification: true,
+    });
+  } catch (error) {
+    await bot.sendPhoto(TELEGRAM_CHAT_ID, url, {
+      caption,
+      parse_mode: 'HTML',
+      disable_notification: true,
+    });
+  }
+}
+
 async function sendApodToTelegram(apod) {
   const {
     copyright,
@@ -41,21 +57,15 @@ async function sendApodToTelegram(apod) {
     url,
   } = apod;
 
-  const src = hdurl || url;
-
-  const caption = `<strong>${title} (${date})</strong>\n<em>Автор и права: ${copyright || '-'}</em>`;
+  const caption = `<strong>${title} (${date})</strong>, <em>${copyright || ''}</em>`;
 
   if (media_type === 'image') {
-    await bot.sendPhoto(TELEGRAM_CHAT_ID, src, {
-      caption,
-      parse_mode: 'HTML',
-      disable_notification: true,
-    });
+    await sendPhoto({ hdurl, url, caption });
   } else if (media_type === 'video') {
-    await sendVideo(src, caption);
+    await sendVideo({ src: hdurl || url, caption });
   }
 
-  await bot.sendMessage(TELEGRAM_CHAT_ID, `<strong>Пояснение:</strong> ${explanation}`, {
+  await bot.sendMessage(TELEGRAM_CHAT_ID, explanation, {
     parse_mode: 'HTML',
     disable_notification: true,
   });
