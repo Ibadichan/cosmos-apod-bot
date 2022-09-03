@@ -57,7 +57,7 @@ async function sendApodToTelegram(apod) {
     url,
   } = apod;
 
-  const caption = `<strong>${title} (${date})</strong>, <em>${copyright || ''}</em>`;
+  const caption = `${title} (${date})\n${copyright}`;
 
   if (media_type === 'image') {
     await sendPhoto({ hdurl, url, caption });

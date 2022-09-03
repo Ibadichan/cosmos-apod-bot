@@ -1,15 +1,11 @@
-const fetchApod = require('../api/fetch-apod');
 const sendApodToTelegram = require('./send-apod-to-telegram');
+const parseApod = require('../parsers/apod');
 
 async function sendApod() {
-  const apod = await fetchApod();
-
-  if (!apod?.data) {
-    throw new Error('An error occured while fetching APOD.');
-  }
+  const apod = await parseApod();
 
   return Promise.all([
-    sendApodToTelegram(apod.data),
+    sendApodToTelegram(apod),
   ]);
 }
 
